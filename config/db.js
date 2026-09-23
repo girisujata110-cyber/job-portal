@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 const db = async () => {
   try {
-    await mongoose.connect("mongodb://127.0.0.1:27017/myportal");
+    await mongoose.connect("mongodb+srv://girisujata110_db_user:test@cluster0.3h2omiu.mongodb.net/dbtest");
 
     console.log("MongoDB connected successfully");
   } catch (error) {

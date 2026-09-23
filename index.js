@@ -9,7 +9,7 @@ import Post from "./schema/post.model.js";
 const app = express();
 
 
-// ================= MIDDLEWARE =================
+
 
 app.use(cors());
 app.use(express.json());
@@ -17,16 +17,13 @@ app.use(express.json());
 db();
 
 
-// ================= HOME =================
 
 app.get("/", (req, res) => {
   res.send("Job Portal API is running!");
 });
 
 
-// ================= JOB =================
 
-// POST JOB
 app.post("/job", async (req, res) => {
   try {
     const {
@@ -65,7 +62,7 @@ app.post("/job", async (req, res) => {
 });
 
 
-// GET ALL JOBS
+
 app.get("/findjob", async (req, res) => {
   try {
     const jobdetail = await jobmodel.find();
@@ -115,9 +112,8 @@ app.delete("/job/:id", async (req, res) => {
 });
 
 
-// ================= PRODUCT =================
 
-// CREATE PRODUCT
+
 app.post("/product", async (req, res) => {
   try {
     const {
@@ -160,7 +156,7 @@ app.post("/product", async (req, res) => {
 });
 
 
-// GET ALL PRODUCTS
+
 app.get("/product", async (req, res) => {
   try {
     const products = await productmodel.find();
@@ -210,7 +206,7 @@ app.get("/product/:id", async (req, res) => {
 });
 
 
-// UPDATE PRODUCT
+
 app.put("/product/:id", async (req, res) => {
   try {
     const product = await productmodel.findByIdAndUpdate(
@@ -244,7 +240,7 @@ app.put("/product/:id", async (req, res) => {
 });
 
 
-// DELETE PRODUCT
+
 app.delete("/product/:id", async (req, res) => {
   try {
     const product = await productmodel.findByIdAndDelete(
@@ -331,7 +327,6 @@ app.post("/register", async (req, res) => {
 
 
 
-// CREATE POST
 app.post("/post", async (req, res) => {
   try {
     const {
@@ -339,21 +334,9 @@ app.post("/post", async (req, res) => {
       company,
       location,
       salary,
-      description,
-      category,
-      jobType,
-      skills,
-      deadline,
     } = req.body || {};
 
-    if (
-      !title ||
-      !company ||
-      !location ||
-      !salary ||
-      !description ||
-      !category
-    ) {
+    if (!title || !company || !location || !salary) {
       return res.status(400).json({
         message: "Required fields are missing",
       });
@@ -364,13 +347,13 @@ app.post("/post", async (req, res) => {
       company,
       location,
       salary,
-     
     });
 
     res.status(201).json({
       message: "Job posted successfully",
       data: post,
     });
+
   } catch (error) {
     console.log(error);
 
@@ -380,28 +363,6 @@ app.post("/post", async (req, res) => {
     });
   }
 });
-
-
-
-app.get("/posts", async (req, res) => {
-  try {
-    const posts = await Post.find();
-
-    res.status(200).json({
-      message: "Posts fetched successfully",
-      data: posts,
-    });
-  } catch (error) {
-    console.log(error);
-
-    res.status(500).json({
-      message: "Failed to fetch posts",
-      error: error.message,
-    });
-  }
-});
-
-
 app.listen(3000, () => {
   console.log("Server running on http://localhost:3000");
 });
