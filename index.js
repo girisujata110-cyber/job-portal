@@ -26,42 +26,31 @@ app.get("/", (req, res) => {
 
 app.post("/job", async (req, res) => {
   try {
-    const {
-      title,
-      company,
-      location,
-      salary,
-    } = req.body || {};
+    const { title, company, location, salary } = req.body;
 
-    if (!title || !company || !location || !salary) {
-      return res.status(400).json({
-        message: "All job fields are required",
-      });
-    }
-
-    const data = await jobmodel.create({
+    const newJob = new jobmodel({
       title,
       company,
       location,
       salary,
     });
 
+    const savedJob = await newJob.save();
+
     res.status(201).json({
-      message: "Job added successfully",
-      data: data,
+      message: "Job posted successfully",
+      data: savedJob,
     });
 
   } catch (error) {
-    console.log(error);
+    console.log("POST JOB ERROR:", error);
 
     res.status(500).json({
-      message: "Job failed",
+      message: "Failed to post job",
       error: error.message,
     });
   }
 });
-
-
 
 app.get("/findjob", async (req, res) => {
   try {
@@ -83,7 +72,7 @@ app.get("/findjob", async (req, res) => {
 });
 
 
-// DELETE JOB
+
 app.delete("/job/:id", async (req, res) => {
   try {
     const jobdetail = await jobmodel.findByIdAndDelete(
@@ -359,6 +348,32 @@ app.post("/post", async (req, res) => {
 
     res.status(500).json({
       message: "Job posting failed",
+      error: error.message,
+    });
+  }
+});
+app.get("/postjob", async (req, res) => {
+  try {
+    const post = await jobmodel.find(
+      
+    );
+
+    if (!post) {
+      return res.status(404).json({
+        message: "job not found",
+      });
+    }
+
+    res.status(200).json({
+      message: "job created successfully",
+      data: post,
+    });
+
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: "Failed to fetch product",
       error: error.message,
     });
   }
